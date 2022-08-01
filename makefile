@@ -1,43 +1,29 @@
-NAME		= philo
+NAME = philosophers
 
-#--------------- DIRS ---------------#
+SRCS =	src/atoi.c \
+		src/philosophers.c \
 
-INCLUDE_DIR	= include
-SRC_DIR		= src
-OBJS_DIR	= objs
+CC = gcc
 
-#--------------- FILES ---------------#
+CFLAGS = -Wall -Werror -Wextra
 
-INC				= -I $(INCLUDE_DIR)
+OBJS = $(SRCS:.c=.o)
 
-SRC				= philosophers.c \
+RM = rm -rf
 
-OBJ				= $(addprefix $(OBJS_DIR)/,$(SRC:.c=.o))
+HEADER = include/philosophers.h
 
-#--------------- COMPILATION ---------------#
+all: $(NAME)
 
-CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g $(INC)
-
-#--------------- RULES ---------------#
-
-objs/%.o:src/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) -c $(CFLAGS) -o $@ $^
-	@echo "Compiling $^"
-
-all:	$(NAME)
-
-$(NAME): $(OBJ)
-	@$(CC) $(OBJ) -o $(NAME)
-	@echo "Built $(NAME)"
+$(NAME):$(OBJS) $(HEADER)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	@rm -rf $(OBJS_DIR)
+	@$(RM) $(OBJS)
 
-fclean:	clean
-	@rm -f $(NAME)
+fclean: clean
+	@$(RM) $(NAME)
 
-re:	fclean all
+re: fclean all
 
-.PHONY: all re clean fclean
+PHONY: all clean fclean re
