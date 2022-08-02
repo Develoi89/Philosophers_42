@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/02 12:30:23 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/08/02 13:24:02 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_vars
 	t_args	*args;
 }	t_vars;
 
+int	errors(char *s);
 int	atoi(const char *str);
+int	comprove(char **argv);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/02 12:30:18 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/08/02 14:18:32 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,14 @@ static void	initargs(t_vars *vars, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_vars	*vars;
-	int		i;
 
-	i = 0;
+	if (comprove(argv) == 1)
+		return (errors("\033[1;31mOnly numeric arguments are valid\n"));
 	if (argc != 5 && argc != 6)
-	{
-		printf("\033[1;31mInvalid num of arguents!\n");
-		return (0);
-	}
+		return (errors("\033[1;31mInvalid num of arguents!\n"));
 	vars = (t_vars *)malloc(sizeof(t_vars));
 	if (!vars)
-		return (0);
+		return (errors("\033[1;31mvars malloc failed!\n"));
 	initargs(vars, argc, argv);
 	initphilos(vars, argc);
 	free (vars->args);
