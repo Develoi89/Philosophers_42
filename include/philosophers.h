@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Philosophers.h                                     :+:      :+:    :+:   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/01 14:01:56 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/08/02 12:30:23 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,23 @@ typedef struct s_args
 	int	limiteat;
 	int	cutl;
 }	t_args;
+
+typedef struct s_philo
+{
+	int	phnum;
+	int	left;
+	int	right;
+	int	tte;
+	int	ttd;
+	int	tts;
+	int	limiteat;
+}	t_philo;
+
+typedef struct s_vars
+{
+	t_philo	*philo;
+	t_args	*args;
+}	t_vars;
 
 int	atoi(const char *str);
 
