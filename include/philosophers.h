@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/03 13:15:26 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/08/04 12:03:19 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+struct s_vars;
 
 typedef struct s_args
 {
@@ -39,6 +41,7 @@ typedef struct s_philo
 	int	phnum;
 	int	right;
 	int	limiteat;
+	struct s_vars	*vars;
 }	t_philo;
 
 typedef struct s_vars
@@ -54,6 +57,9 @@ int	errors(char *s);
 int	atoi(const char *str);
 int	comprove(char **argv, int argc);
 
+void	time_sleep(int i);
 void	free_all(t_vars *vars);
+
+long long int	get_time(void);
 
 #endif

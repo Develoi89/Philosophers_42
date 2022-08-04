@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/03 13:15:34 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/08/04 12:01:20 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,21 @@ void free_all(t_vars *vars)
 	free(vars->args);
 	free(vars->philo);
 	free(vars);
+}
+
+long long int	get_time(void)
+{
+	struct timeval	i;
+
+	gettimeofday(&i, NULL);
+	return ((i.tv_sec * 1000) + (i.tv_usec / 1000));
+}
+
+void time_sleep(int i)
+{
+	long long int now;
+
+	now = get_time();
+	while (i > get_time() - now)
+		usleep(50);
 }
