@@ -28,4 +28,7 @@ fclean: clean
 
 re: fclean all
 
+run: $(NAME)
+	./philosophers 10 42 42 42
+
 PHONY: all clean fclean re
