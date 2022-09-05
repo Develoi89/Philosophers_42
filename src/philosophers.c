@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/22 17:02:44 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/05 16:27:44 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	initphilos(t_vars *vars, int argc)
 {
 	int	i;
 
-	i = 0;
+	i = argc;
 	vars->philo = malloc(sizeof(t_philo) * vars->args->philos);
 	if (!vars->philo)
 		return (errors("\033[1;31mphilos malloc failed!\n"));
@@ -30,8 +30,6 @@ static int	initphilos(t_vars *vars, int argc)
 			vars->philo[i].left = 0;
 		if (argc == 6)
 			vars->philo[i].limiteat = vars->args->limiteat;
-		printf("For philo num %d, cutl left is %d and right is %d\n",
-			vars->philo[i].phnum, vars->philo[i].right, vars->philo[i].left);
 		i++;
 	}
 	return (1);
@@ -55,11 +53,9 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	if (!vars->cutl)
 		return (errors("\033[1;31mcutl malloc failed!\n"));
 	while (i < vars->args->philos)
-		pthread_mutex_init(&vars->cutl[i++], NULL);
-	pthread_mutex_init(&vars->writing, NULL);
-	pthread_mutex_init(&vars->dead, NULL);
-	printf("philos:%d\ntime to eat:%d\ntime to die:%d\ntime to sleep:%d\n",
-		vars->args->philos, vars->args->tte, vars->args->ttd, vars->args->tts);
+		pthread_mutex_init(&(vars->cutl[i++]), NULL);
+	pthread_mutex_init(&(vars->writing), NULL);
+	pthread_mutex_init(&(vars->dead), NULL);
 	return (0);
 }
 
@@ -67,49 +63,39 @@ static void	*routine(void *var)
 {
 	t_vars	*vars;
 	int		id;
-	pthread_mutex_t p;
 
-	pthread_mutex_init(&p, NULL);
 	vars = (t_vars *)var;
 	id = vars->id;
-	// if (id % 2 == 0)
-	// 	time_sleep(200);
-	// printf("cubierto izq:%d", vars->philo[id].left);
-	// printf("cubierto dcha:%d", vars->philo[id].right);
-	// pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
-	// pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
-	pthread_mutex_lock(&p);
-	printf("hola");
-	pthread_mutex_unlock(&p);
-	// pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);
-	// pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
-	printf("hola");
+// 	if (id % 2 == 0)
+// 		time_sleep(200);
+	pthread_mutex_lock(&vars->writing);
+	printf("%d\n", id);
+	pthread_mutex_unlock(&vars->writing);
 	return (NULL);
 }
 
 static int	start(t_vars *vars)
 {
-	int			i;
-	pthread_t	*threads;
+	int	i;
 
 	i = 0;
-	threads = (pthread_t *)malloc(sizeof(pthread_t) * vars->args->philos);
-	if (!threads)
+	vars->threads = (pthread_t *)malloc(sizeof(pthread_t) * vars->args->philos);
+	if (!vars->threads)
 		return (errors("\033[1;31mthreads malloc failed!\n"));
 	while (i < vars->args->philos)
 	{
 		vars->id = i;
-		pthread_create(&threads[i], NULL, &routine, vars);
-		sleep(100);
+		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
+		usleep(50);
 		i++;
 	}
 	i = 0;
 	while (i < vars->args->philos)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(vars->threads[i], NULL);
 		i++;
 	}
-	// free (threads);
+	free (vars->threads);
 	return (0);
 }
 

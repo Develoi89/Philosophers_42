@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/04 12:01:20 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/05 16:27:47 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	comprove(char **argv, int argc)
 	return (1);
 }
 
-void free_all(t_vars *vars)
+void	free_all(t_vars *vars)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < vars->args->philos)
@@ -60,9 +60,9 @@ long long int	get_time(void)
 	return ((i.tv_sec * 1000) + (i.tv_usec / 1000));
 }
 
-void time_sleep(int i)
+void	time_sleep(int i)
 {
-	long long int now;
+	long long int	now;
 
 	now = get_time();
 	while (i > get_time() - now)

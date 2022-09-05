@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/08/22 15:59:17 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/05 16:27:33 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_vars
 	pthread_mutex_t	dead;
 	pthread_mutex_t	*cutl;
 	pthread_mutex_t	writing;
+	pthread_t		*threads;
 }	t_vars;
 
 int				errors(char *s);
