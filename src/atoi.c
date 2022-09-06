@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 12:59:42 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/05 16:27:38 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/06 16:51:22 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ftt_isnegative(const char *str, int i)
 
 int	ftt_convert(const char *str, int i)
 {
-	int	x;
+	long long int	x;
 
 	x = 0;
 	while (str[i] >= 48 && str[i] <= 57 && str[i] != '\0')
@@ -47,7 +47,7 @@ int	ftt_convert(const char *str, int i)
 	return (x);
 }
 
-int	atoi(const char *str)
+long long int	ft_atoi(const char *str)
 {
 	int	i;
 	int	n;

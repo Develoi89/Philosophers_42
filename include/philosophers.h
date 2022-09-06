@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/05 16:27:33 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/06 16:51:19 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,23 @@
 
 typedef struct s_args
 {
-	int	ttd;
-	int	tte;
-	int	tts;
-	int	philos;
-	int	limiteat;
+	int				philos;
+	int				limiteat;
+	long long int	tte;
+	long long int	ttd;
+	long long int	tts;
 }	t_args;
 
 typedef struct s_philo
 {
-	int				tte;
-	int				ttd;
-	int				tts;
 	int				left;
 	int				phnum;
 	int				right;
 	int				limiteat;
+	long long int	tte;
+	long long int	ttd;
+	long long int	tts;
+	long long int	time;
 }	t_philo;
 
 typedef struct s_vars
@@ -46,17 +47,18 @@ typedef struct s_vars
 	int				id;
 	t_args			*args;
 	t_philo			*philo;
+	pthread_t		*threads;
 	pthread_mutex_t	dead;
 	pthread_mutex_t	*cutl;
 	pthread_mutex_t	writing;
-	pthread_t		*threads;
 }	t_vars;
 
 int				errors(char *s);
-int				atoi(const char *str);
+long long int	ft_atoi(const char *str);
 int				comprove(char **argv, int argc);
 
 void			time_sleep(int i);
+void			*routine(void *var);
 void			free_all(t_vars *vars);
 
 long long int	get_time(void);

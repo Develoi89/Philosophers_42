@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/05 16:27:44 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/06 16:55:49 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	vars->args = malloc(sizeof(t_args));
 	if (!vars->args)
 		return (errors("\033[1;31margs malloc failed!\n"));
-	vars->args->philos = atoi(argv[1]);
-	vars->args->tte = atoi(argv[3]);
-	vars->args->ttd = atoi(argv[2]);
-	vars->args->tts = atoi(argv[4]);
+	vars->args->philos = ft_atoi(argv[1]);
+	vars->args->ttd = ft_atoi(argv[2]);
+	vars->args->tte = ft_atoi(argv[3]);
+	vars->args->tts = ft_atoi(argv[4]);
 	if (argc == 6)
 		vars->args->limiteat = atoi(argv[5]);
 	vars->cutl = malloc(sizeof(pthread_mutex_t) * vars->args->philos);
@@ -57,21 +57,6 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	pthread_mutex_init(&(vars->writing), NULL);
 	pthread_mutex_init(&(vars->dead), NULL);
 	return (0);
-}
-
-static void	*routine(void *var)
-{
-	t_vars	*vars;
-	int		id;
-
-	vars = (t_vars *)var;
-	id = vars->id;
-// 	if (id % 2 == 0)
-// 		time_sleep(200);
-	pthread_mutex_lock(&vars->writing);
-	printf("%d\n", id);
-	pthread_mutex_unlock(&vars->writing);
-	return (NULL);
 }
 
 static int	start(t_vars *vars)
@@ -86,7 +71,7 @@ static int	start(t_vars *vars)
 	{
 		vars->id = i;
 		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
-		usleep(50);
+		usleep(5);
 		i++;
 	}
 	i = 0;

@@ -2,6 +2,7 @@ NAME = philosophers
 
 SRCS =	src/atoi.c \
 		src/utils.c\
+		src/circle.c\
 		src/errors.c \
 		src/philosophers.c \
 
