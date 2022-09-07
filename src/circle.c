@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/06 17:08:11 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/07 17:53:24 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static int	sleeping(t_vars *vars, int id)
 	{
 		if (!(vars->philo[id].time > (get_time() - vars->args->ttd)))
 		{
+			usleep(20);
 			pthread_mutex_lock(&vars->writing);
-			printf("Philosopher number %d is dead\n", id);
-			pthread_mutex_unlock(&vars->writing);
+			printf("\033[1;31mPhilosopher number %d is dead\n", id);
 			return (0);
 		}
 	}
@@ -32,18 +32,18 @@ static int	sleeping(t_vars *vars, int id)
 
 static int	eat(t_vars *vars, int id)
 {
+	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
+	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
 	pthread_mutex_lock(&vars->writing);
 	printf("Philosopher %d is eating\n", id);
 	pthread_mutex_unlock(&vars->writing);
-	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
-	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
 	while (vars->philo[id].time > (get_time() - vars->args->tte))
 	{
 		if (!(vars->philo[id].time > (get_time() - vars->args->ttd)))
 		{
+			usleep(20);
 			pthread_mutex_lock(&vars->writing);
-			printf("Philosopher number %d is dead\n", id);
-			pthread_mutex_unlock(&vars->writing);
+			printf("\033[1;31mPhilosopher number %d is dead\n", id);
 			return (0);
 		}
 	}
@@ -57,11 +57,13 @@ void	*routine(void *var)
 {
 	t_vars	*vars;
 	int		id;
+	int		i;
 
 	vars = (t_vars *)var;
 	id = vars->id;
 	// if (id % 2 == 0)
 	// 	time_sleep(20);
+	// usleep (20);
 	vars->philo[id].time = get_time();
 	while (vars->philo[id].time > (get_time() - vars->args->ttd))
 	{
@@ -70,8 +72,10 @@ void	*routine(void *var)
 		if (!sleeping(vars, id))
 			break ;
 	}
-	pthread_mutex_lock(&vars->writing);
-	printf("philo %d is dead", id);
+	write(1, "a", 1);
 	pthread_mutex_unlock(&vars->writing);
+	i = -1;
+	while (i < vars->args->philos)
+		pthread_mutex_unlock(&vars->cutl[i]);
 	return (NULL);
 }

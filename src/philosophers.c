@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/06 16:55:49 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/07 17:51:54 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	initphilos(t_vars *vars, int argc)
 {
 	int	i;
 
-	i = argc;
+	i = 0;
 	vars->philo = malloc(sizeof(t_philo) * vars->args->philos);
 	if (!vars->philo)
 		return (errors("\033[1;31mphilos malloc failed!\n"));
@@ -71,15 +71,13 @@ static int	start(t_vars *vars)
 	{
 		vars->id = i;
 		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
-		usleep(5);
+		usleep(20);
 		i++;
 	}
 	i = 0;
 	while (i < vars->args->philos)
-	{
-		pthread_join(vars->threads[i], NULL);
-		i++;
-	}
+		pthread_join(vars->threads[i++], NULL);
+	i = 0;
 	free (vars->threads);
 	return (0);
 }
