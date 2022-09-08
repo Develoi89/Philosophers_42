@@ -6,11 +6,18 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/07 17:53:24 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:58:45 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../include/philosophers.h"
+
+static void	printing(char *sms, t_vars *vars)
+{
+	pthread_mutex_lock(&vars->writing);
+	printf("Philosopher %d is %s", vars->id, sms);
+	pthread_mutex_unlock(&vars->writing);
+}
 
 static int	sleeping(t_vars *vars, int id)
 {
