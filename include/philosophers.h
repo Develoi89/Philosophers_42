@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/06 16:51:19 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/19 11:35:48 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_philo
 }	t_philo;
 
 typedef struct s_vars
-{
+{	
+	int				dd;
 	int				id;
 	t_args			*args;
 	t_philo			*philo;
@@ -54,7 +55,6 @@ typedef struct s_vars
 }	t_vars;
 
 int				errors(char *s);
-long long int	ft_atoi(const char *str);
 int				comprove(char **argv, int argc);
 
 void			time_sleep(int i);
@@ -62,5 +62,6 @@ void			*routine(void *var);
 void			free_all(t_vars *vars);
 
 long long int	get_time(void);
+long long int	ft_atoi(const char *str);
 
 #endif

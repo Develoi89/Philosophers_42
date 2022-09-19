@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/07 17:51:54 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/19 11:35:56 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,10 @@ static int	start(t_vars *vars)
 		i++;
 	}
 	i = 0;
-	while (i < vars->args->philos)
-		pthread_join(vars->threads[i++], NULL);
+	while (i++ < vars->args->philos)
+		pthread_join(vars->threads[i], NULL);
 	i = 0;
+	pthread_mutex_unlock(&vars->writing);
 	free (vars->threads);
 	return (0);
 }

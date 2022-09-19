@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/05 16:27:47 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/19 11:35:58 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ void	free_all(t_vars *vars)
 	free(vars->cutl);
 	free(vars->args);
 	free(vars->philo);
+	if (vars->threads)
+		free(vars->threads);
 	free(vars);
+	exit(0);
 }
 
 long long int	get_time(void)
