@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/19 11:35:56 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/19 16:43:57 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	main(int argc, char **argv)
 		return (errors("\033[1;31mvars malloc failed!\n"));
 	initargs(vars, argc, argv);
 	initphilos(vars, argc);
+	vars->start_time = get_time();
 	start(vars);
 	free_all(vars);
 	return (0);

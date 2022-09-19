@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/19 11:35:54 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/19 16:43:54 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static int	eat(t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
+	vars->philo[id].time = get_time();
 	printing("is eating", vars, id);
 	while (vars->philo[id].time > (get_time() - vars->args->tte))
 	{
@@ -61,7 +62,6 @@ static int	eat(t_vars *vars, int id)
 	}
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);
-	vars->philo[id].time = get_time();
 	return (1);
 }
 

@@ -1,20 +1,29 @@
 NAME = philosophers
 
-SRCS =	src/atoi.c \
-		src/utils.c\
-		src/circle.c\
-		src/errors.c \
-		src/philosophers.c \
+INCLUDE_DIR	= include
+SRC_DIR		= src
+OBJS_DIR	= objs
+
+SRC =	atoi.c \
+		utils.c \
+		circle.c \
+		errors.c \
+		philosophers.c \
 
 CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(addprefix $(OBJS_DIR)/,$(SRC:.c=.o))
 
 RM = rm -rf
 
 HEADER = include/philosophers.h
+
+objs/%.o:src/%.c $(HEADER)
+	@mkdir -p $(dir $@)
+	@$(CC) -c $(CFLAGS) -o $@ $<
+	@echo "Compiling $^"
 
 all: $(NAME)
 
@@ -22,7 +31,7 @@ $(NAME):$(OBJS) $(HEADER)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(OBJS_DIR)
 
 fclean: clean
 	@$(RM) $(NAME)

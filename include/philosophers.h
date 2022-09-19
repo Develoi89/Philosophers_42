@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/19 11:35:48 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/19 15:59:24 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_vars
 	t_args			*args;
 	t_philo			*philo;
 	pthread_t		*threads;
+	long long int	start_time;
 	pthread_mutex_t	dead;
 	pthread_mutex_t	*cutl;
 	pthread_mutex_t	writing;
