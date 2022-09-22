@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   circle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/19 16:43:54 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/22 11:43:30 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../include/philosophers.h"
 
-static void	printing(char *sms, t_vars *vars, int id)
+void	printing(char *sms, t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->writing);
-	printf("%lld %d %s\n", get_time(), id, sms);
+	printf("%lld %d %s\n", (get_time() - vars->start_time), id, sms);
 	if (vars->dd == 0)
 		pthread_mutex_unlock(&vars->writing);
 	else
@@ -33,15 +33,7 @@ static void	think(t_vars *vars, int id)
 static int	sleeping(t_vars *vars, int id)
 {
 	printing("is sleeping", vars, id);
-	while (vars->philo[id].time > (get_time() - vars->args->tts))
-	{
-		if (!(vars->philo[id].time > (get_time() - vars->args->ttd)))
-		{
-			vars->dd = 1;
-			printing("died", vars, id);
-			return (0);
-		}
-	}
+	time_sleep (vars->args->tts);
 	return (1);
 }
 
@@ -51,15 +43,7 @@ static int	eat(t_vars *vars, int id)
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
 	vars->philo[id].time = get_time();
 	printing("is eating", vars, id);
-	while (vars->philo[id].time > (get_time() - vars->args->tte))
-	{
-		if (!(vars->philo[id].time > (get_time() - vars->args->ttd)))
-		{
-			vars->dd = 1;
-			printing("died", vars, id);
-			return (0);
-		}
-	}
+	time_sleep (vars->args->tte);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);
 	return (1);
@@ -87,7 +71,7 @@ void	*routine(void *var)
 		think(vars, id);
 	}
 	i = -1;
-	// while (++i < vars->args->philos)
-	// 	pthread_mutex_unlock(&vars->cutl[i]);
+	while (++i < vars->args->philos)
+		pthread_mutex_unlock(&vars->cutl[i]);
 	return (NULL);
 }

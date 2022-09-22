@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/19 15:59:24 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/22 10:55:31 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int				comprove(char **argv, int argc);
 void			time_sleep(int i);
 void			*routine(void *var);
 void			free_all(t_vars *vars);
+void			printing(char *sms, t_vars *vars, int id);
 
 long long int	get_time(void);
 long long int	ft_atoi(const char *str);
