@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 12:07:01 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/22 13:31:57 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,26 @@
 
 int	any_dead(t_vars *vars)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < vars->args->philos)
 	{
 		pthread_mutex_lock(&vars->dead);
-		if (vars->args->ttd < (get_time() - vars->philo[i].time) && vars->philo[i].time != 0)
+		if (vars->args->ttd < (get_time()
+				- vars->philo[i].time) && vars->philo[i].time != 0)
+		{
+			if (vars->dd == 0)
 			{
-				if (vars->dd == 0)
-				{
-					vars->dd = 1;
-					printing("\x1b[41mdied", vars, vars->philo[i].phnum);
-				}
-				return (0);
+				vars->dd = 1;
+				printing("\x1b[41mdied", vars, vars->philo[i].phnum);
 			}
+			return (0);
+		}
+		if (vars->done == vars->args->philos)
+			return (0);
+		if (vars->philo[i].limiteat == 0 && vars->args->limiteat > 0)
+			vars->done++;
 		pthread_mutex_unlock(&vars->dead);
 		i++;
 	}
@@ -59,9 +64,7 @@ static int	start(t_vars *vars)
 	i = 0;
 	while (i++ < vars->args->philos)
 		pthread_join(vars->threads[i], NULL);
-	i = 0;
 	pthread_mutex_unlock(&vars->writing);
-	free (vars->threads);
 	return (0);
 }
 
@@ -101,7 +104,10 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	vars->args->tte = ft_atoi(argv[3]);
 	vars->args->tts = ft_atoi(argv[4]);
 	if (argc == 6)
+	{
+		vars->done = 0;
 		vars->args->limiteat = atoi(argv[5]);
+	}
 	vars->cutl = malloc(sizeof(pthread_mutex_t) * vars->args->philos);
 	if (!vars->cutl)
 		return (errors("\033[1;31mcutl malloc failed!\n"));

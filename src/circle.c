@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 12:13:56 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/22 13:35:08 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	printing(char *sms, t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->writing);
-	printf("\x1b[0m%lld %d %s\n", (get_time() - vars->start_time), id, sms);
+	printf("\x1b[0m%lld %d %s\x1b[0m\n", (get_time() - vars->start_time), id, sms);
 	if (vars->dd == 0)
 		pthread_mutex_unlock(&vars->writing);
 	else
@@ -46,6 +46,7 @@ static int	eat(t_vars *vars, int id)
 	vars->philo[id].time = get_time();
 	printing("is \x1b[35meating", vars, vars->philo[id].phnum);
 	time_sleep (vars->args->tte);
+	vars->philo[id].limiteat--;
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);
 	return (1);
@@ -71,6 +72,8 @@ void	*routine(void *var)
 		if (!sleeping(vars, id))
 			break ;
 		think(vars, id);
+		if (vars->philo[id].limiteat == 0)
+			break ;
 	}
 	i = -1;
 	while (++i < vars->args->philos)

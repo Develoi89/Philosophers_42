@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 10:55:31 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/22 13:12:43 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_vars
 {	
 	int				dd;
 	int				id;
+	int				done;
 	t_args			*args;
 	t_philo			*philo;
 	pthread_t		*threads;
