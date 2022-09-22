@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 11:43:30 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/22 12:13:56 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	printing(char *sms, t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->writing);
-	printf("%lld %d %s\n", (get_time() - vars->start_time), id, sms);
+	printf("\x1b[0m%lld %d %s\n", (get_time() - vars->start_time), id, sms);
 	if (vars->dd == 0)
 		pthread_mutex_unlock(&vars->writing);
 	else
@@ -27,12 +27,12 @@ void	printing(char *sms, t_vars *vars, int id)
 
 static void	think(t_vars *vars, int id)
 {
-	printing("is thinking", vars, id);
+	printing("is \x1b[32mthinking", vars, vars->philo[id].phnum);
 }
 
 static int	sleeping(t_vars *vars, int id)
 {
-	printing("is sleeping", vars, id);
+	printing("is \x1b[36msleeping", vars, vars->philo[id].phnum);
 	time_sleep (vars->args->tts);
 	return (1);
 }
@@ -40,9 +40,11 @@ static int	sleeping(t_vars *vars, int id)
 static int	eat(t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
+	printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
+	printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
 	vars->philo[id].time = get_time();
-	printing("is eating", vars, id);
+	printing("is \x1b[35meating", vars, vars->philo[id].phnum);
 	time_sleep (vars->args->tte);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);

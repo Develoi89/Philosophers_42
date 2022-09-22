@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 11:33:06 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/22 12:07:01 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	any_dead(t_vars *vars)
 				if (vars->dd == 0)
 				{
 					vars->dd = 1;
-					printing("died", vars, vars->philo[i].phnum);
+					printing("\x1b[41mdied", vars, vars->philo[i].phnum);
 				}
 				return (0);
 			}
