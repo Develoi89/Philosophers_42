@@ -6,7 +6,7 @@
 /*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 13:35:08 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/22 15:06:22 by develoi89        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,30 @@
 void	printing(char *sms, t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->writing);
-	printf("\x1b[0m%lld %d %s\x1b[0m\n", (get_time() - vars->start_time), id, sms);
+	printf("\x1b[0m%lld %d %s\x1b[0m\n",
+		(get_time() - vars->start_time), id, sms);
 	if (vars->dd == 0)
 		pthread_mutex_unlock(&vars->writing);
 	else
 	{
-		sleep(1);
+		usleep(600);
 		free_all(vars);
 	}
 }
 
 static void	think(t_vars *vars, int id)
 {
-	printing("is \x1b[32mthinking", vars, vars->philo[id].phnum);
+	if (vars->dd == 0 && vars->done != vars->args->philos)
+		printing("is \x1b[32mthinking", vars, vars->philo[id].phnum);
 }
 
 static int	sleeping(t_vars *vars, int id)
 {
-	printing("is \x1b[36msleeping", vars, vars->philo[id].phnum);
-	time_sleep (vars->args->tts);
+	if (vars->dd == 0 && vars->done != vars->args->philos)
+	{
+		printing("is \x1b[36msleeping", vars, vars->philo[id].phnum);
+		time_sleep (vars->args->tts);
+	}
 	return (1);
 }
 
