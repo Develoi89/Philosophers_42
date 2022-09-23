@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/19 11:35:58 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/23 10:45:17 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	comprove(char **argv, int argc)
 		while (argv[i][j] != '\0')
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
-				return (errors("\033[1;31mOnly numeric arguments are valid\n"));
+				return (errors
+					("\033[1;31mOnly positive numeric arguments are valid\n"));
 			j++;
 		}
 		i++;
