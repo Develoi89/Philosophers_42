@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 13:31:57 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/27 16:50:44 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ int	any_dead(t_vars *vars)
 			}
 			return (0);
 		}
-		if (vars->done == vars->args->philos)
+		if (vars->args->param == 6 && vars->done == vars->args->philos)
 			return (0);
-		if (vars->philo[i].limiteat == 0 && vars->args->limiteat > 0)
+		if (vars->args->param == 6 && vars->philo[i].limiteat == 0
+			&& vars->args->limiteat > 0)
 			vars->done++;
 		pthread_mutex_unlock(&vars->dead);
 		i++;
@@ -40,15 +41,11 @@ int	any_dead(t_vars *vars)
 	return (1);
 }
 
-static int	start(t_vars *vars)
+static int	start(t_vars *vars, int i)
 {
-	int	i;
-
-	i = 0;
 	vars->threads = (pthread_t *)malloc(sizeof(pthread_t) * vars->args->philos);
 	if (!vars->threads)
 		return (errors("\033[1;31mthreads malloc failed!\n"));
-	vars->start_time = get_time();
 	while (i < vars->args->philos)
 	{
 		vars->id = i;
@@ -58,11 +55,16 @@ static int	start(t_vars *vars)
 	}
 	while (42)
 	{
+		if (vars->init == vars->args->philos)
+		{
+			vars->start_time = get_time();
+			break ;
+		}
+	}
+	while (42)
 		if (!any_dead (vars))
 			break ;
-	}
-	i = 0;
-	while (i++ < vars->args->philos)
+	while (i--)
 		pthread_join(vars->threads[i], NULL);
 	pthread_mutex_unlock(&vars->writing);
 	return (0);
@@ -73,6 +75,7 @@ static int	initphilos(t_vars *vars, int argc)
 	int	i;
 
 	i = 0;
+	vars->dd = 0;
 	vars->philo = malloc(sizeof(t_philo) * vars->args->philos);
 	if (!vars->philo)
 		return (errors("\033[1;31mphilos malloc failed!\n"));
@@ -96,6 +99,7 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	int	i;
 
 	i = 0;
+	vars->init = 0;
 	vars->args = malloc(sizeof(t_args));
 	if (!vars->args)
 		return (errors("\033[1;31margs malloc failed!\n"));
@@ -107,6 +111,7 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	{
 		vars->done = 0;
 		vars->args->limiteat = atoi(argv[5]);
+		vars->args->param = 6;
 	}
 	vars->cutl = malloc(sizeof(pthread_mutex_t) * vars->args->philos);
 	if (!vars->cutl)
@@ -121,7 +126,9 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_vars	*vars;
+	int		i;
 
+	i = 0;
 	if (comprove(argv, argc) != 1)
 		return (0);
 	vars = (t_vars *)malloc(sizeof(t_vars));
@@ -130,7 +137,7 @@ int	main(int argc, char **argv)
 	initargs(vars, argc, argv);
 	initphilos(vars, argc);
 	vars->start_time = get_time();
-	start(vars);
+	start(vars, i);
 	free_all(vars);
 	return (0);
 }

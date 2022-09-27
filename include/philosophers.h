@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: develoi89 <develoi89@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/22 13:12:43 by develoi89        ###   ########.fr       */
+/*   Updated: 2022/09/27 16:50:57 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 typedef struct s_args
 {
+	int				param;
 	int				philos;
 	int				limiteat;
 	long long int	tte;
@@ -46,6 +47,7 @@ typedef struct s_vars
 {	
 	int				dd;
 	int				id;
+	int				init;
 	int				done;
 	t_args			*args;
 	t_philo			*philo;
