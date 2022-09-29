@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/27 16:50:54 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/29 17:16:13 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,17 @@ static int	sleeping(t_vars *vars, int id)
 
 static void	eat(t_vars *vars, int id)
 {
+	rationing (vars, id);
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
-	printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
+	if (vars->dd == 0)
+		printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
-	printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
+	if (vars->dd == 0)
+		printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
+	vars->philo[id].meals++;
+	if (vars->dd == 0)
+		printing("is \x1b[35meating", vars, vars->philo[id].phnum);
 	vars->philo[id].time = get_time();
-	printing("is \x1b[35meating", vars, vars->philo[id].phnum);
 	time_sleep (vars->args->tte);
 	if (vars->args->param == 6)
 		vars->philo[id].limiteat--;
@@ -45,8 +50,7 @@ static void	eat(t_vars *vars, int id)
 
 void	circle(t_vars *vars, int id)
 {
-	while (vars->philo[id].time > (get_time() - vars->args->ttd)
-		&& vars->dd == 0)
+	while (vars->dd == 0)
 	{
 		eat(vars, id);
 		sleeping(vars, id);
@@ -65,12 +69,12 @@ void	*routine(void *var)
 	vars = (t_vars *)var;
 	vars->init++;
 	id = vars->id;
-	while (42)
-		if (vars->init == vars->args->philos && vars->start_time)
+	while (vars->dd == 0)
+		if (vars->init == vars->args->philos && vars->start_time != 0)
 			break ;
+	vars->philo[id].time = get_time();
 	if (id % 2 != 0)
 		time_sleep(vars->args->tte / 2);
-	vars->philo[id].time = get_time();
 	circle(vars, id);
 	i = -1;
 	while (++i < vars->args->philos)

@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/27 16:50:57 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/29 16:43:28 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_philo
 	int				left;
 	int				phnum;
 	int				right;
+	int				meals;
 	int				limiteat;
 	long long int	tte;
 	long long int	ttd;
@@ -59,12 +60,13 @@ typedef struct s_vars
 }	t_vars;
 
 int				errors(char *s);
+int				free_all(t_vars *vars);
 int				comprove(char **argv, int argc);
+int				printing(char *sms, t_vars *vars, int id);
 
 void			time_sleep(int i);
 void			*routine(void *var);
-void			free_all(t_vars *vars);
-void			printing(char *sms, t_vars *vars, int id);
+void			rationing(t_vars *vars, int id);
 
 long long int	get_time(void);
 long long int	ft_atoi(const char *str);

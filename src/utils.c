@@ -6,23 +6,27 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/27 16:50:50 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/29 17:04:45 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	printing(char *sms, t_vars *vars, int id)
+int	printing(char *sms, t_vars *vars, int id)
 {
 	pthread_mutex_lock(&vars->writing);
 	printf("\x1b[0m%lld %d %s\x1b[0m\n",
 		(get_time() - vars->start_time), id, sms);
 	if (vars->dd == 0)
+	{
 		pthread_mutex_unlock(&vars->writing);
+		return (1);
+	}
 	else
 	{
-		usleep(600);
 		free_all(vars);
+		usleep(600);
+		return (0);
 	}
 }
 
@@ -49,7 +53,7 @@ int	comprove(char **argv, int argc)
 	return (1);
 }
 
-void	free_all(t_vars *vars)
+int	free_all(t_vars *vars)
 {
 	int	i;
 
@@ -67,7 +71,7 @@ void	free_all(t_vars *vars)
 	if (vars->threads)
 		free(vars->threads);
 	free(vars);
-	exit(0);
+	return (0);
 }
 
 long long int	get_time(void)

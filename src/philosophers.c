@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/27 16:50:44 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/09/29 17:22:46 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,17 @@ int	any_dead(t_vars *vars)
 	int	i;
 
 	i = 0;
-	while (i < vars->args->philos)
+	while (i < vars->args->philos && vars->dd == 0)
 	{
-		pthread_mutex_lock(&vars->dead);
-		if (vars->args->ttd < (get_time()
-				- vars->philo[i].time) && vars->philo[i].time != 0)
+		if (vars->philo[i].time != 0
+			&& vars->args->ttd < (get_time() - vars->philo[i].time))
 		{
 			if (vars->dd == 0)
 			{
 				vars->dd = 1;
+				printf("%d\n", vars->philo[i].meals);
+				printf("%lld\n", vars->philo[i].time);
+				printf("%lld < %lld\n", vars->args->ttd, (get_time() - vars->philo[i].time));
 				printing("\x1b[41mdied", vars, vars->philo[i].phnum);
 			}
 			return (0);
@@ -35,7 +37,6 @@ int	any_dead(t_vars *vars)
 		if (vars->args->param == 6 && vars->philo[i].limiteat == 0
 			&& vars->args->limiteat > 0)
 			vars->done++;
-		pthread_mutex_unlock(&vars->dead);
 		i++;
 	}
 	return (1);
@@ -50,10 +51,10 @@ static int	start(t_vars *vars, int i)
 	{
 		vars->id = i;
 		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
-		usleep(20);
 		i++;
+		usleep(20);
 	}
-	while (42)
+	while (vars->dd == 0)
 	{
 		if (vars->init == vars->args->philos)
 		{
@@ -61,10 +62,10 @@ static int	start(t_vars *vars, int i)
 			break ;
 		}
 	}
-	while (42)
-		if (!any_dead (vars))
+	while (vars->dd == 0)
+		if (!any_dead(vars))
 			break ;
-	while (i--)
+	while (--i >= 0)
 		pthread_join(vars->threads[i], NULL);
 	pthread_mutex_unlock(&vars->writing);
 	return (0);
@@ -79,6 +80,7 @@ static int	initphilos(t_vars *vars, int argc)
 	vars->philo = malloc(sizeof(t_philo) * vars->args->philos);
 	if (!vars->philo)
 		return (errors("\033[1;31mphilos malloc failed!\n"));
+	vars->philo[i].meals = 0;
 	while (i < vars->args->philos)
 	{
 		vars->philo[i].phnum = i + 1;
@@ -99,6 +101,7 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	int	i;
 
 	i = 0;
+	vars->done = 0;
 	vars->init = 0;
 	vars->args = malloc(sizeof(t_args));
 	if (!vars->args)
@@ -109,7 +112,6 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	vars->args->tts = ft_atoi(argv[4]);
 	if (argc == 6)
 	{
-		vars->done = 0;
 		vars->args->limiteat = atoi(argv[5]);
 		vars->args->param = 6;
 	}
@@ -136,8 +138,7 @@ int	main(int argc, char **argv)
 		return (errors("\033[1;31mvars malloc failed!\n"));
 	initargs(vars, argc, argv);
 	initphilos(vars, argc);
-	vars->start_time = get_time();
 	start(vars, i);
-	free_all(vars);
+	// free_all(vars);
 	return (0);
 }
