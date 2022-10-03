@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/29 17:22:46 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/03 18:33:06 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ int	any_dead(t_vars *vars)
 			if (vars->dd == 0)
 			{
 				vars->dd = 1;
-				printf("%d\n", vars->philo[i].meals);
-				printf("%lld\n", vars->philo[i].time);
-				printf("%lld < %lld\n", vars->args->ttd, (get_time() - vars->philo[i].time));
 				printing("\x1b[41mdied", vars, vars->philo[i].phnum);
 			}
 			return (0);
@@ -52,7 +49,7 @@ static int	start(t_vars *vars, int i)
 		vars->id = i;
 		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
 		i++;
-		usleep(20);
+		usleep(50);
 	}
 	while (vars->dd == 0)
 	{
@@ -62,7 +59,7 @@ static int	start(t_vars *vars, int i)
 			break ;
 		}
 	}
-	while (vars->dd == 0)
+	while (42)
 		if (!any_dead(vars))
 			break ;
 	while (--i >= 0)
@@ -77,10 +74,10 @@ static int	initphilos(t_vars *vars, int argc)
 
 	i = 0;
 	vars->dd = 0;
-	vars->philo = malloc(sizeof(t_philo) * vars->args->philos);
+	vars->philo = (t_philo *)malloc(sizeof(t_philo) * vars->args->philos);
 	if (!vars->philo)
 		return (errors("\033[1;31mphilos malloc failed!\n"));
-	vars->philo[i].meals = 0;
+	// vars->philo[i].meals = 0;
 	while (i < vars->args->philos)
 	{
 		vars->philo[i].phnum = i + 1;
@@ -93,7 +90,7 @@ static int	initphilos(t_vars *vars, int argc)
 			vars->philo[i].limiteat = vars->args->limiteat;
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 static int	initargs(t_vars *vars, int argc, char **argv)
@@ -136,9 +133,12 @@ int	main(int argc, char **argv)
 	vars = (t_vars *)malloc(sizeof(t_vars));
 	if (!vars)
 		return (errors("\033[1;31mvars malloc failed!\n"));
-	initargs(vars, argc, argv);
-	initphilos(vars, argc);
-	start(vars, i);
-	// free_all(vars);
+	if (initargs(vars, argc, argv) != 0)
+		return (0);
+	if (initphilos(vars, argc) != 0)
+		return (0);
+	if (!start(vars, i))
+		return (0);
+	free_all(vars);
 	return (0);
 }

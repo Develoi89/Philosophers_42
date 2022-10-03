@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/29 17:04:45 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/03 18:31:10 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	printing(char *sms, t_vars *vars, int id)
 	else
 	{
 		free_all(vars);
-		usleep(600);
+		usleep(400);
 		return (0);
 	}
 }
@@ -60,17 +60,23 @@ int	free_all(t_vars *vars)
 	i = 0;
 	while (i < vars->args->philos)
 	{
+		pthread_mutex_unlock(&vars->cutl[i]);
 		pthread_mutex_destroy(&vars->cutl[i]);
 		i++;
 	}
+	pthread_mutex_unlock(&vars->writing);
 	pthread_mutex_destroy(&vars->writing);
 	pthread_mutex_destroy(&vars->dead);
-	free(vars->cutl);
-	free(vars->args);
-	free(vars->philo);
+	if (vars->cutl)
+		free(vars->cutl);
+	if (vars->args)
+		free(vars->args);
+	if (vars->philo)
+		free(vars->philo);
 	if (vars->threads)
 		free(vars->threads);
-	free(vars);
+	if (vars)
+		free(vars);
 	return (0);
 }
 

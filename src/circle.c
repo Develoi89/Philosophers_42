@@ -6,16 +6,19 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/29 17:16:13 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/03 18:26:38 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../include/philosophers.h"
 
-static void	think(t_vars *vars, int id)
+static int	think(t_vars *vars, int id)
 {
 	if (vars->dd == 0 && vars->done != vars->args->philos)
 		printing("is \x1b[32mthinking", vars, vars->philo[id].phnum);
+	else
+		return (0);
+	return (1);
 }
 
 static int	sleeping(t_vars *vars, int id)
@@ -25,15 +28,18 @@ static int	sleeping(t_vars *vars, int id)
 		printing("is \x1b[36msleeping", vars, vars->philo[id].phnum);
 		time_sleep (vars->args->tts);
 	}
+	else
+		return (0);
 	return (1);
 }
 
-static void	eat(t_vars *vars, int id)
+static int	eat(t_vars *vars, int id)
 {
-	rationing (vars, id);
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
 	if (vars->dd == 0)
 		printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
+	if (vars->args->philos <= 1)
+		return (0);
 	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
 	if (vars->dd == 0)
 		printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
@@ -42,22 +48,28 @@ static void	eat(t_vars *vars, int id)
 		printing("is \x1b[35meating", vars, vars->philo[id].phnum);
 	vars->philo[id].time = get_time();
 	time_sleep (vars->args->tte);
+	if (vars->dd != 0)
+		return (0);
 	if (vars->args->param == 6)
 		vars->philo[id].limiteat--;
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
 	pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);
+	return (1);
 }
 
-void	circle(t_vars *vars, int id)
+int	circle(t_vars *vars, int id)
 {
 	while (vars->dd == 0)
 	{
-		eat(vars, id);
-		sleeping(vars, id);
-		think(vars, id);
+		if (!eat(vars, id) || !sleeping(vars, id) || !think(vars, id))
+		{
+			usleep (42);
+			break ;
+		}
 		if (vars->args->param == 6 && vars->philo[id].limiteat == 0)
 			break ;
 	}
+	return (1);
 }
 
 void	*routine(void *var)
@@ -73,8 +85,8 @@ void	*routine(void *var)
 		if (vars->init == vars->args->philos && vars->start_time != 0)
 			break ;
 	vars->philo[id].time = get_time();
-	if (id % 2 != 0)
-		time_sleep(vars->args->tte / 2);
+	if (vars->philo[id].phnum % 2 != 0)
+		time_sleep(vars->args->tte);
 	circle(vars, id);
 	i = -1;
 	while (++i < vars->args->philos)

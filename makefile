@@ -1,4 +1,4 @@
-NAME = philosophers
+NAME = philo
 
 INCLUDE_DIR	= include
 SRC_DIR		= src
@@ -40,6 +40,6 @@ fclean: clean
 re: fclean all
 
 run: $(NAME)
-	./philosophers 10 42 42 42
+	./philo 200 800 200 200
 
 PHONY: all clean fclean re
