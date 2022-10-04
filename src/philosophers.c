@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/03 18:33:06 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:55:04 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	start(t_vars *vars, int i)
 		vars->id = i;
 		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
 		i++;
-		usleep(50);
+		usleep(2000);
 	}
 	while (vars->dd == 0)
 	{
@@ -77,7 +77,6 @@ static int	initphilos(t_vars *vars, int argc)
 	vars->philo = (t_philo *)malloc(sizeof(t_philo) * vars->args->philos);
 	if (!vars->philo)
 		return (errors("\033[1;31mphilos malloc failed!\n"));
-	// vars->philo[i].meals = 0;
 	while (i < vars->args->philos)
 	{
 		vars->philo[i].phnum = i + 1;

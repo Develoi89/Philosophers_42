@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/03 18:26:38 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:56:33 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	*routine(void *var)
 {
 	t_vars	*vars;
 	int		id;
-	int		i;
 
 	vars = (t_vars *)var;
 	vars->init++;
@@ -88,8 +87,5 @@ void	*routine(void *var)
 	if (vars->philo[id].phnum % 2 != 0)
 		time_sleep(vars->args->tte);
 	circle(vars, id);
-	i = -1;
-	while (++i < vars->args->philos)
-		pthread_mutex_unlock(&vars->cutl[i]);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/09/29 16:43:28 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/04 16:01:10 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ typedef struct s_vars
 	pthread_mutex_t	*cutl;
 	pthread_mutex_t	writing;
 }	t_vars;
+
+typedef struct s_tmp
+{
+	t_vars	*vars;
+	int		id;
+}	t_tmp;
 
 int				errors(char *s);
 int				free_all(t_vars *vars);
