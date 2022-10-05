@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/04 16:01:10 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/05 16:30:27 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int				printing(char *sms, t_vars *vars, int id);
 
 void			time_sleep(int i);
 void			*routine(void *var);
-void			rationing(t_vars *vars, int id);
+void			free_tmp(t_tmp **tmp, int i);
 
 long long int	get_time(void);
 long long int	ft_atoi(const char *str);

@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/04 15:55:04 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/05 16:39:18 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,27 @@ int	any_dead(t_vars *vars)
 
 static int	start(t_vars *vars, int i)
 {
+	t_tmp	**tmp;
+
+	tmp = (t_tmp **)malloc(sizeof(t_tmp) * vars->args->philos);
 	vars->threads = (pthread_t *)malloc(sizeof(pthread_t) * vars->args->philos);
-	if (!vars->threads)
+	if (!vars->threads || !tmp)
 		return (errors("\033[1;31mthreads malloc failed!\n"));
-	while (i < vars->args->philos)
+	while (++i < vars->args->philos)
 	{
-		vars->id = i;
-		pthread_create(&(vars->threads[i]), NULL, &routine, vars);
-		i++;
-		usleep(2000);
+		tmp[i] = (t_tmp *)malloc(sizeof(t_tmp));
+		if (!tmp[i])
+			return (errors("\033[1;31mthreads malloc failed!\n"));
+		tmp[i]->vars = vars;
+		tmp[i]->id = i;
+		pthread_create(&(vars->threads[i]), NULL, &routine, tmp[i]);
 	}
-	while (vars->dd == 0)
-	{
-		if (vars->init == vars->args->philos)
-		{
-			vars->start_time = get_time();
-			break ;
-		}
-	}
+	while (vars->init != vars->args->philos)
+		vars->start_time = get_time();
 	while (42)
 		if (!any_dead(vars))
 			break ;
+	free_tmp(tmp, i);
 	while (--i >= 0)
 		pthread_join(vars->threads[i], NULL);
 	pthread_mutex_unlock(&vars->writing);
@@ -126,7 +126,7 @@ int	main(int argc, char **argv)
 	t_vars	*vars;
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (comprove(argv, argc) != 1)
 		return (0);
 	vars = (t_vars *)malloc(sizeof(t_vars));
@@ -138,6 +138,7 @@ int	main(int argc, char **argv)
 		return (0);
 	if (!start(vars, i))
 		return (0);
-	free_all(vars);
+	if (vars->dd == 0)
+		free_all(vars);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/04 16:03:58 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/05 16:32:01 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,21 @@ int	circle(t_vars *vars, int id)
 	return (1);
 }
 
-void	*routine(void *var)
+void	*routine(void *temp)
 {
-	t_vars	*vars;
+	t_tmp	*tmp;
 	int		id;
 
-	vars = (t_vars *)var;
-	vars->init++;
-	id = vars->id;
-	while (vars->dd == 0)
-		if (vars->init == vars->args->philos && vars->start_time != 0)
+	tmp = (t_tmp *)temp;
+	tmp->vars->init++;
+	id = tmp->id;
+	while (tmp->vars->dd == 0)
+		if (tmp->vars->init == tmp->vars->args->philos
+			&& tmp->vars->start_time != 0)
 			break ;
-	vars->philo[id].time = get_time();
-	if (vars->philo[id].phnum % 2 != 0)
-		time_sleep(vars->args->tte);
-	circle(vars, id);
+	tmp->vars->philo[id].time = get_time();
+	if (tmp->vars->philo[id].phnum % 2 == 0)
+		time_sleep(tmp->vars->args->tte);
+	circle(tmp->vars, id);
 	return (NULL);
 }
