@@ -6,87 +6,86 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/05 16:32:01 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:42:45 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../include/philosophers.h"
 
-static int	think(t_vars *vars, int id)
+static int	think(t_philo *philo)
 {
-	if (vars->dd == 0 && vars->done != vars->args->philos)
-		printing("is \x1b[32mthinking", vars, vars->philo[id].phnum);
+	if (philo->vars->dd == 0 && philo->vars->done != philo->vars->args->philos)
+		printing("is \x1b[32mthinking", philo);
 	else
 		return (0);
 	return (1);
 }
 
-static int	sleeping(t_vars *vars, int id)
+static int	sleeping(t_philo *philo)
 {
-	if (vars->dd == 0 && vars->done != vars->args->philos)
+	if (philo->vars->dd == 0 && philo->vars->done != philo->vars->args->philos)
 	{
-		printing("is \x1b[36msleeping", vars, vars->philo[id].phnum);
-		time_sleep (vars->args->tts);
+		printing("is \x1b[36msleeping", philo);
+		time_sleep (philo->vars->args->tts);
 	}
 	else
 		return (0);
 	return (1);
 }
 
-static int	eat(t_vars *vars, int id)
+static int	eat(t_philo *philo)
 {
-	pthread_mutex_lock(&vars->cutl[vars->philo[id].right]);
-	if (vars->dd == 0)
-		printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
-	if (vars->args->philos <= 1)
+	pthread_mutex_lock(&philo->vars->cutl[philo->right]);
+	if (philo->vars->dd == 0)
+		printing("is \x1b[33mhas taken a fork", philo);
+	if (philo->vars->args->philos <= 1)
 		return (0);
-	pthread_mutex_lock(&vars->cutl[vars->philo[id].left]);
-	if (vars->dd == 0)
-		printing("is \x1b[33mhas taken a fork", vars, vars->philo[id].phnum);
-	vars->philo[id].meals++;
-	if (vars->dd == 0)
-		printing("is \x1b[35meating", vars, vars->philo[id].phnum);
-	vars->philo[id].time = get_time();
-	time_sleep (vars->args->tte);
-	if (vars->dd != 0)
+	pthread_mutex_lock(&philo->vars->cutl[philo->left]);
+	if (philo->vars->dd == 0)
+		printing("is \x1b[33mhas taken a fork", philo);
+	philo->meals++;
+	if (philo->vars->dd == 0)
+		printing("is \x1b[35meating", philo);
+	philo->time = get_time();
+	time_sleep (philo->vars->args->tte);
+	if (philo->vars->dd != 0)
 		return (0);
-	if (vars->args->param == 6)
-		vars->philo[id].limiteat--;
-	pthread_mutex_unlock(&vars->cutl[vars->philo[id].right]);
-	pthread_mutex_unlock(&vars->cutl[vars->philo[id].left]);
+	if (philo->vars->args->param == 6)
+		philo->limiteat--;
+	pthread_mutex_unlock(&philo->vars->cutl[philo->right]);
+	pthread_mutex_unlock(&philo->vars->cutl[philo->left]);
 	return (1);
 }
 
-int	circle(t_vars *vars, int id)
+int	circle(t_philo *philo)
 {
-	while (vars->dd == 0)
+	while (philo->vars->dd == 0)
 	{
-		if (!eat(vars, id) || !sleeping(vars, id) || !think(vars, id))
-		{
-			usleep (42);
+		if (philo->vars->args->param == 6 && philo->limiteat == 0)
 			break ;
-		}
-		if (vars->args->param == 6 && vars->philo[id].limiteat == 0)
+		if (!eat(philo))
+			break ;
+		if (!sleeping(philo))
+			break ;
+		if (!think(philo))
 			break ;
 	}
 	return (1);
 }
 
-void	*routine(void *temp)
+void	*routine(void *philos)
 {
-	t_tmp	*tmp;
-	int		id;
+	t_philo	*philo;
 
-	tmp = (t_tmp *)temp;
-	tmp->vars->init++;
-	id = tmp->id;
-	while (tmp->vars->dd == 0)
-		if (tmp->vars->init == tmp->vars->args->philos
-			&& tmp->vars->start_time != 0)
+	philo = (t_philo *)philos;
+	philo->vars->init++;
+	while (philo->vars->dd == 0)
+		if (philo->vars->init == philo->vars->args->philos
+			&& philo->vars->start_time != 0)
 			break ;
-	tmp->vars->philo[id].time = get_time();
-	if (tmp->vars->philo[id].phnum % 2 == 0)
-		time_sleep(tmp->vars->args->tte);
-	circle(tmp->vars, id);
+	philo->time = get_time();
+	if (philo->phnum % 2 == 0)
+		time_sleep(philo->vars->args->tte);
+	circle(philo);
 	return (NULL);
 }

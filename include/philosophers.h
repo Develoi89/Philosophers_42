@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/05 16:30:27 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:52:39 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+struct	s_vars;
+
 
 typedef struct s_args
 {
@@ -42,6 +45,7 @@ typedef struct s_philo
 	long long int	ttd;
 	long long int	tts;
 	long long int	time;
+	struct s_vars	*vars;
 }	t_philo;
 
 typedef struct s_vars
@@ -59,20 +63,13 @@ typedef struct s_vars
 	pthread_mutex_t	writing;
 }	t_vars;
 
-typedef struct s_tmp
-{
-	t_vars	*vars;
-	int		id;
-}	t_tmp;
-
 int				errors(char *s);
-int				free_all(t_vars *vars);
+int				free_all(t_philo *philo);
 int				comprove(char **argv, int argc);
-int				printing(char *sms, t_vars *vars, int id);
+int				printing(char *sms, t_philo *philo);
 
 void			time_sleep(int i);
 void			*routine(void *var);
-void			free_tmp(t_tmp **tmp, int i);
 
 long long int	get_time(void);
 long long int	ft_atoi(const char *str);

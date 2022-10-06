@@ -6,28 +6,20 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 13:01:04 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/03 18:31:10 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:45:23 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-int	printing(char *sms, t_vars *vars, int id)
+int	printing(char *sms, t_philo *philo)
 {
-	pthread_mutex_lock(&vars->writing);
-	printf("\x1b[0m%lld %d %s\x1b[0m\n",
-		(get_time() - vars->start_time), id, sms);
-	if (vars->dd == 0)
-	{
-		pthread_mutex_unlock(&vars->writing);
-		return (1);
-	}
-	else
-	{
-		free_all(vars);
-		usleep(400);
-		return (0);
-	}
+	pthread_mutex_lock(&philo->vars->writing);
+	if (philo->vars->dd == 0)
+		printf("\x1b[0m%lld %d %s\x1b[0m\n",
+			(get_time() - philo->vars->start_time), philo->phnum, sms);
+	pthread_mutex_unlock(&philo->vars->writing);
+	return (1);
 }
 
 int	comprove(char **argv, int argc)
@@ -53,30 +45,30 @@ int	comprove(char **argv, int argc)
 	return (1);
 }
 
-int	free_all(t_vars *vars)
+int	free_all(t_philo *philo)
 {
 	int	i;
 
 	i = 0;
-	while (i < vars->args->philos)
+	while (i < philo->vars->args->philos)
 	{
-		pthread_mutex_unlock(&vars->cutl[i]);
-		pthread_mutex_destroy(&vars->cutl[i]);
+		pthread_mutex_unlock(&philo->vars->cutl[i]);
+		pthread_mutex_destroy(&philo->vars->cutl[i]);
 		i++;
 	}
-	pthread_mutex_unlock(&vars->writing);
-	pthread_mutex_destroy(&vars->writing);
-	pthread_mutex_destroy(&vars->dead);
-	if (vars->cutl)
-		free(vars->cutl);
-	if (vars->args)
-		free(vars->args);
-	if (vars->philo)
-		free(vars->philo);
-	if (vars->threads)
-		free(vars->threads);
-	if (vars)
-		free(vars);
+	pthread_mutex_unlock(&philo->vars->writing);
+	pthread_mutex_destroy(&philo->vars->writing);
+	pthread_mutex_destroy(&philo->vars->dead);
+	if (philo->vars->cutl)
+		free(philo->vars->cutl);
+	if (philo->vars->args)
+		free(philo->vars->args);
+	if (philo->vars->threads)
+		free(philo->vars->threads);
+	if (philo->vars)
+		free(philo->vars);
+	if (philo)
+		free(philo);
 	return (0);
 }
 

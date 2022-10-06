@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/05 16:39:18 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:49:56 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ int	any_dead(t_vars *vars)
 	i = 0;
 	while (i < vars->args->philos && vars->dd == 0)
 	{
+		pthread_mutex_lock(&vars->dead);
 		if (vars->philo[i].time != 0
 			&& vars->args->ttd < (get_time() - vars->philo[i].time))
 		{
 			if (vars->dd == 0)
-			{
-				vars->dd = 1;
-				printing("\x1b[41mdied", vars, vars->philo[i].phnum);
-			}
+				printing("\x1b[41mdied", &vars->philo[i]);
+			vars->dd = 1;
 			return (0);
 		}
-		if (vars->args->param == 6 && vars->done == vars->args->philos)
-			return (0);
 		if (vars->args->param == 6 && vars->philo[i].limiteat == 0
 			&& vars->args->limiteat > 0)
 			vars->done++;
+		if (vars->done == vars->args->philos)
+			return (0);
+		pthread_mutex_unlock(&vars->dead);
 		i++;
 	}
 	return (1);
@@ -41,27 +41,16 @@ int	any_dead(t_vars *vars)
 
 static int	start(t_vars *vars, int i)
 {
-	t_tmp	**tmp;
-
-	tmp = (t_tmp **)malloc(sizeof(t_tmp) * vars->args->philos);
 	vars->threads = (pthread_t *)malloc(sizeof(pthread_t) * vars->args->philos);
-	if (!vars->threads || !tmp)
+	if (!vars->threads)
 		return (errors("\033[1;31mthreads malloc failed!\n"));
 	while (++i < vars->args->philos)
-	{
-		tmp[i] = (t_tmp *)malloc(sizeof(t_tmp));
-		if (!tmp[i])
-			return (errors("\033[1;31mthreads malloc failed!\n"));
-		tmp[i]->vars = vars;
-		tmp[i]->id = i;
-		pthread_create(&(vars->threads[i]), NULL, &routine, tmp[i]);
-	}
+		pthread_create(&(vars->threads[i]), NULL, &routine, &vars->philo[i]);
 	while (vars->init != vars->args->philos)
 		vars->start_time = get_time();
 	while (42)
 		if (!any_dead(vars))
 			break ;
-	free_tmp(tmp, i);
 	while (--i >= 0)
 		pthread_join(vars->threads[i], NULL);
 	pthread_mutex_unlock(&vars->writing);
@@ -87,6 +76,7 @@ static int	initphilos(t_vars *vars, int argc)
 			vars->philo[i].left = 0;
 		if (argc == 6)
 			vars->philo[i].limiteat = vars->args->limiteat;
+		vars->philo[i].vars = vars;
 		i++;
 	}
 	return (0);
@@ -139,6 +129,6 @@ int	main(int argc, char **argv)
 	if (!start(vars, i))
 		return (0);
 	if (vars->dd == 0)
-		free_all(vars);
+		free_all(&vars->philo[0]);
 	return (0);
 }
