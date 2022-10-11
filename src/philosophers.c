@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/11 16:36:45 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/11 16:55:34 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	start(t_vars *vars, int i)
 	return (1);
 }
 
-static int	initphilos(t_vars *vars, int argc)
+static int	initphilos(t_vars *vars)
 {
 	int	i;
 
@@ -85,8 +85,7 @@ static int	initphilos(t_vars *vars, int argc)
 			vars->philo[i].left = i + 1;
 		else
 			vars->philo[i].left = 0;
-		if (argc == 6)
-			vars->philo[i].limiteat = vars->args->limiteat;
+		vars->philo[i].limiteat = vars->args->limiteat;
 		vars->philo[i].vars = vars;
 		i++;
 	}
@@ -135,7 +134,7 @@ int	main(int argc, char **argv)
 		return (errors("\033[1;31mvars malloc failed!\n"));
 	if (initargs(vars, argc, argv, i) != 0)
 		return (0);
-	if (initphilos(vars, argc) != 0)
+	if (initphilos(vars) != 0)
 		return (0);
 	if (!start(vars, i))
 		return (0);
