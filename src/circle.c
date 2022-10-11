@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/06 17:42:45 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/11 16:41:14 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,18 @@
 
 static int	think(t_philo *philo)
 {
-	if (philo->vars->dd == 0 && philo->vars->done != philo->vars->args->philos)
-		printing("is \x1b[32mthinking", philo);
-	else
+	if (philo->vars->dd)
 		return (0);
+	printing("is \x1b[32mthinking", philo);
 	return (1);
 }
 
 static int	sleeping(t_philo *philo)
 {
-	if (philo->vars->dd == 0 && philo->vars->done != philo->vars->args->philos)
-	{
-		printing("is \x1b[36msleeping", philo);
-		time_sleep (philo->vars->args->tts);
-	}
-	else
+	if (philo->vars->dd)
 		return (0);
+	printing("is \x1b[36msleeping", philo);
+	time_sleep (philo->vars->args->tts);
 	return (1);
 }
 
@@ -50,8 +46,7 @@ static int	eat(t_philo *philo)
 	time_sleep (philo->vars->args->tte);
 	if (philo->vars->dd != 0)
 		return (0);
-	if (philo->vars->args->param == 6)
-		philo->limiteat--;
+	philo->limiteat--;
 	pthread_mutex_unlock(&philo->vars->cutl[philo->right]);
 	pthread_mutex_unlock(&philo->vars->cutl[philo->left]);
 	return (1);
@@ -59,13 +54,17 @@ static int	eat(t_philo *philo)
 
 int	circle(t_philo *philo)
 {
-	while (philo->vars->dd == 0)
+	while (philo->vars->dd == 0 && philo->limiteat != 0)
 	{
-		if (philo->vars->args->param == 6 && philo->limiteat == 0)
+		if (philo->limiteat == 0)
 			break ;
 		if (!eat(philo))
 			break ;
+		if (philo->limiteat == 0)
+			break ;
 		if (!sleeping(philo))
+			break ;
+		if (philo->limiteat == 0)
 			break ;
 		if (!think(philo))
 			break ;
@@ -80,9 +79,14 @@ void	*routine(void *philos)
 	philo = (t_philo *)philos;
 	philo->vars->init++;
 	while (philo->vars->dd == 0)
+	{
 		if (philo->vars->init == philo->vars->args->philos
 			&& philo->vars->start_time != 0)
+		{
+			usleep (300);
 			break ;
+		}
+	}
 	philo->time = get_time();
 	if (philo->phnum % 2 == 0)
 		time_sleep(philo->vars->args->tte);

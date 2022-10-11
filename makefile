@@ -8,7 +8,6 @@ SRC =	atoi.c \
 		utils.c \
 		circle.c \
 		errors.c \
-		utils_2.c \
 		philosophers.c \
 
 CC = gcc

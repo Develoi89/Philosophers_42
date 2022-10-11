@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/06 17:49:56 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/11 16:36:45 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,27 @@ static int	start(t_vars *vars, int i)
 	if (!vars->threads)
 		return (errors("\033[1;31mthreads malloc failed!\n"));
 	while (++i < vars->args->philos)
+	{
 		pthread_create(&(vars->threads[i]), NULL, &routine, &vars->philo[i]);
-	while (vars->init != vars->args->philos)
-		vars->start_time = get_time();
+		usleep (60);
+	}
+	printf("3 & init is %d\n", vars->init);
+	while (42)
+	{
+		if (vars->init >= vars->args->philos)
+		{
+			vars->start_time = get_time();
+			break ;
+		}
+		printf ("vars->init is %d\n", vars->init);
+	}
 	while (42)
 		if (!any_dead(vars))
 			break ;
 	while (--i >= 0)
 		pthread_join(vars->threads[i], NULL);
 	pthread_mutex_unlock(&vars->writing);
-	return (0);
+	return (1);
 }
 
 static int	initphilos(t_vars *vars, int argc)
@@ -82,11 +93,9 @@ static int	initphilos(t_vars *vars, int argc)
 	return (0);
 }
 
-static int	initargs(t_vars *vars, int argc, char **argv)
+static int	initargs(t_vars *vars, int argc, char **argv, int i)
 {
-	int	i;
-
-	i = 0;
+	i++;
 	vars->done = 0;
 	vars->init = 0;
 	vars->args = malloc(sizeof(t_args));
@@ -96,9 +105,10 @@ static int	initargs(t_vars *vars, int argc, char **argv)
 	vars->args->ttd = ft_atoi(argv[2]);
 	vars->args->tte = ft_atoi(argv[3]);
 	vars->args->tts = ft_atoi(argv[4]);
+	vars->args->limiteat = -1;
 	if (argc == 6)
 	{
-		vars->args->limiteat = atoi(argv[5]);
+		vars->args->limiteat += atoi(argv[5]) + 1;
 		vars->args->param = 6;
 	}
 	vars->cutl = malloc(sizeof(pthread_mutex_t) * vars->args->philos);
@@ -117,12 +127,13 @@ int	main(int argc, char **argv)
 	int		i;
 
 	i = -1;
+	usleep (1000);
 	if (comprove(argv, argc) != 1)
 		return (0);
 	vars = (t_vars *)malloc(sizeof(t_vars));
 	if (!vars)
 		return (errors("\033[1;31mvars malloc failed!\n"));
-	if (initargs(vars, argc, argv) != 0)
+	if (initargs(vars, argc, argv, i) != 0)
 		return (0);
 	if (initphilos(vars, argc) != 0)
 		return (0);
