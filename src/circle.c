@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/12 12:01:47 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 12:06:12 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,5 @@ void	*routine(void *philos)
 	if (philo->phnum % 2 == 0)
 		time_sleep(philo->vars->args->tte);
 	circle(philo);
-	printf("adios\n");
 	return (NULL);
 }

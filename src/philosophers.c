@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/12 11:50:12 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 12:05:38 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int	start(t_vars *vars, int i)
 			vars->start_time = get_time();
 			break ;
 		}
-		printf ("vars->init is %d\n", vars->init);
 	}
 	while (42)
 		if (!any_dead(vars))
