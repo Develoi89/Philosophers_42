@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/06 17:52:39 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 11:26:07 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <sys/time.h>
 
 struct	s_vars;
-
 
 typedef struct s_args
 {
