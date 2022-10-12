@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/11 16:55:34 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 11:22:28 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ int	main(int argc, char **argv)
 		return (0);
 	if (!start(vars, i))
 		return (0);
-	if (vars->dd == 0)
-		free_all(&vars->philo[0]);
+	free_all(&vars->philo[0]);
 	return (0);
 }
