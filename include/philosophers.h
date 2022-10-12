@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:08:33 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/12 11:26:07 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 11:42:10 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_philo
 	int				left;
 	int				phnum;
 	int				right;
-	int				meals;
 	int				limiteat;
 	long long int	tte;
 	long long int	ttd;

@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 11:05:22 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/12 11:22:28 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 11:50:12 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static int	start(t_vars *vars, int i)
 		pthread_create(&(vars->threads[i]), NULL, &routine, &vars->philo[i]);
 		usleep (60);
 	}
-	printf("3 & init is %d\n", vars->init);
 	while (42)
 	{
 		if (vars->init >= vars->args->philos)
@@ -64,7 +63,6 @@ static int	start(t_vars *vars, int i)
 			break ;
 	while (--i >= 0)
 		pthread_join(vars->threads[i], NULL);
-	pthread_mutex_unlock(&vars->writing);
 	return (1);
 }
 

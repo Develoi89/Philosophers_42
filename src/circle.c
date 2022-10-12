@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:09:05 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/10/11 16:56:11 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/10/12 12:01:47 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,20 @@ static int	sleeping(t_philo *philo)
 static int	eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->vars->cutl[philo->right]);
-	if (philo->vars->dd == 0)
-		printing("is \x1b[33mhas taken a fork", philo);
-	if (philo->vars->args->philos <= 1)
+	if (philo->vars->dd)
+		return (0);
+	printing("is \x1b[33mhas taken a fork", philo);
+	if (philo->vars->args->philos <= 1 || philo->vars->dd)
 		return (0);
 	pthread_mutex_lock(&philo->vars->cutl[philo->left]);
-	if (philo->vars->dd == 0)
-		printing("is \x1b[33mhas taken a fork", philo);
-	philo->meals++;
-	if (philo->vars->dd == 0)
-		printing("is \x1b[35meating", philo);
+	if (philo->vars->args->philos <= 1 || philo->vars->dd)
+		return (0);
+	printing("is \x1b[33mhas taken a fork", philo);
+	if (philo->vars->dd)
+		return (0);
+	printing("is \x1b[35meating", philo);
 	philo->time = get_time();
 	time_sleep (philo->vars->args->tte);
-	if (philo->vars->dd != 0)
-		return (0);
 	philo->limiteat--;
 	pthread_mutex_unlock(&philo->vars->cutl[philo->right]);
 	pthread_mutex_unlock(&philo->vars->cutl[philo->left]);
@@ -56,15 +56,15 @@ int	circle(t_philo *philo)
 {
 	while (philo->vars->dd == 0 && philo->limiteat != 0)
 	{
-		if (philo->limiteat == 0)
+		if (philo->limiteat == 0 || philo->vars->dd == 1)
 			break ;
 		if (!eat(philo))
 			break ;
-		if (philo->limiteat == 0)
+		if (philo->limiteat == 0 || philo->vars->dd == 1)
 			break ;
 		if (!sleeping(philo))
 			break ;
-		if (philo->limiteat == 0)
+		if (philo->limiteat == 0 || philo->vars->dd == 1)
 			break ;
 		if (!think(philo))
 			break ;
@@ -91,5 +91,6 @@ void	*routine(void *philos)
 	if (philo->phnum % 2 == 0)
 		time_sleep(philo->vars->args->tte);
 	circle(philo);
+	printf("adios\n");
 	return (NULL);
 }
